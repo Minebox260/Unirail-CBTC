@@ -44,16 +44,16 @@ void * report_position(void * args) {
 
 			send_data(rpa->client.sd, rpa->client.adr_serv, send_message);
 
-			//if (!initialized) printf("EVC [%d] - Position initialisée, envoi au RBC...", rpa->train_id);
+			if (!initialized) printf("ATO/ATP [%d] - Position initialisée, envoi au Superviseur...", rpa->train_id);
 
 			wait_for_response(send_message.req_id, &recv_message, 5);
 
 			if (recv_message.code != 201) {
-				printf("EVC [%d] - Erreur lors de l'envoi du rapport de position: %d\n", rpa->train_id, recv_message.code);
+				printf("ATO/ATP [%d] - Erreur lors de l'envoi du rapport de position: %d\n", rpa->train_id, recv_message.code);
 			} else {
-				// Signals to the EOA handler that the RBC acknowledged the first position
+				// Signals to the EOA handler that the supervisor acknowledged the first position
 				if (!initialized) {
-					printf("OK\nEVC [%d] - Position initiale acquittée par le RBC\n", rpa->train_id);
+					printf("OK\nATO/ATP [%d] - Position initiale acquittée par le Superviseur\n", rpa->train_id);
 					pthread_mutex_lock(rpa->init_pos_mutex);
 					*rpa->pos_initialized = 1;
 					initialized = 1;

@@ -26,8 +26,8 @@ void setup_udp_client(client_udp_init_t * client, char * server_ip, int server_p
 	int erreur;
 
 	client->sd=socket(AF_INET,SOCK_DGRAM,0); 
-	CHECK_ERROR(client->sd,-1, "EVC - Erreur lors de la création du socket de dialogue\n");
-	printf("EVC - N° du socket de dialogue : %d \n", client->sd);
+	CHECK_ERROR(client->sd,-1, "ATO/ATP - Erreur lors de la création du socket de dialogue\n");
+	printf("ATO/ATP - N° du socket de dialogue : %d \n", client->sd);
 
 	struct sockaddr_in client_addr;
     client_addr.sin_family = AF_INET;
@@ -35,7 +35,7 @@ void setup_udp_client(client_udp_init_t * client, char * server_ip, int server_p
     client_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
     erreur = bind(client->sd, (struct sockaddr *)&client_addr, sizeof(client_addr));
-	CHECK_ERROR(erreur, -1, "EVC - Erreur lors du bind du socket de dialogue\n");
+	CHECK_ERROR(erreur, -1, "ATO/ATP - Erreur lors du bind du socket de dialogue\n");
 	
 	// Préparation de l'adresse
 	client->adr_serv.sin_family=AF_INET;
@@ -53,8 +53,8 @@ int setup_udp_server(int port) {
 	struct sockaddr_in serv_adr;
 	socklen_t serv_adr_len = sizeof(serv_adr);
 	sd=socket(AF_INET,SOCK_DGRAM,0); 
-	CHECK_ERROR(sd,-1, "RBC - Erreur lors de la création du socket  de dialogue\n");
-	printf("RBC - N° du socket de dialogue : %d \n", sd);
+	CHECK_ERROR(sd,-1, "Superviseur - Erreur lors de la création du socket  de dialogue\n");
+	printf("Superviseur - N° du socket de dialogue : %d \n", sd);
 	
 	// Préparation de l'adresse
 	serv_adr.sin_family=AF_INET;
@@ -63,7 +63,7 @@ int setup_udp_server(int port) {
 
 	// Affectation de l'adresse au socket
 	erreur=bind(sd,(const struct sockaddr *) &serv_adr, serv_adr_len);
-	CHECK_ERROR(erreur,-1, "RBC - Erreur lors du bind du socket de dialogue\n");
+	CHECK_ERROR(erreur,-1, "Superviseur - Erreur lors du bind du socket de dialogue\n");
 	
 	return sd;
 }

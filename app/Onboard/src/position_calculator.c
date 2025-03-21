@@ -126,7 +126,7 @@ void * position_calculator(void * args) {
 		last_timestamp = fusionIMU.timestamp.timestamp64;
 		pca->hedge->haveNewValues_ = false;
 	} else {
-		fprintf(stderr, "EVC [%d] - Impossible d'utiliser le marvelmind, utilisation de l'odométrie uniquement\n", pca->chemin_id);
+		fprintf(stderr, "ATO/ATP [%d] - Impossible d'utiliser le marvelmind, utilisation de l'odométrie uniquement\n", pca->chemin_id);
 		last_timestamp = get_time_sec();
 	}
 
@@ -192,7 +192,7 @@ void * position_calculator(void * args) {
 							// On a fait un tour complet
 							pthread_mutex_lock(pca->mission_mutex);
 							*(pca->mission) -= 1;
-							printf("EVC [%d] - Tours restants: %d\n", pca->chemin_id, *(pca->mission));
+							printf("ATO/ATP [%d] - Tours restants: %d\n", pca->chemin_id, *(pca->mission));
 							pthread_mutex_unlock(pca->mission_mutex);
 							
 						}
@@ -220,7 +220,7 @@ void * position_calculator(void * args) {
 					pthread_mutex_unlock(pca->state_lock);
 
 				}
-				printf("EVC [%d] - Speed_mm:[%f] - Dt: [%f] - Position: [%d]: %.2f|%.2f,   %.2f|%.2f\n", pca->chemin_id, speed_mm, dt, pca->state->bal, pca->state->pos_r, latest_can_pos_r, pca->state->speed, latest_can_speed);
+				printf("ATO/ATP [%d] - Speed_mm:[%f] - Dt: [%f] - Position: [%d]: %.2f|%.2f,   %.2f|%.2f\n", pca->chemin_id, speed_mm, dt, pca->state->bal, pca->state->pos_r, latest_can_pos_r, pca->state->speed, latest_can_speed);
 			}
 			
 			if (is_marvelmind_on) pca->hedge->haveNewValues_ = false;

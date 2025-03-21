@@ -26,12 +26,12 @@
 #include "../include/trains.h"
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) printf("RBC | Utilisation : ./rbc <port serveur> \n");
+    if (argc != 2) printf("Superviseur | Utilisation : ./supervisor <port serveur> \n");
     else {
         
 		pthread_t message_listener_tid, tid;
 
-        printf("RBC - Initialisation\n");
+        printf("Supervisor - Initialisation\n");
 
 		init_trains();
 

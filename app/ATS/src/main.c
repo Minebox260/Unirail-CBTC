@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
 
-	if (argc != 2) printf("Utilisation: %s <port_evc>\n", argv[0]);
+	if (argc != 2) printf("Utilisation: %s <port_onboard>\n", argv[0]);
 	else {
 		int train_port = atoi(argv[1]);
 		

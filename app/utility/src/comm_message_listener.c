@@ -41,7 +41,7 @@ void wait_for_response(int req_id, message_t *recv_message, int timeout_sec) {
                 response->message.code = -1;
                 response->message.data[0] = NULL;
                 response->ready = 1;
-                fprintf(stderr, "EVC - Pas de réponse reçue la requête %d après %d secondes\n", req_id, timeout_sec);
+                fprintf(stderr, "ATO/ATP - Pas de réponse reçue la requête %d après %d secondes\n", req_id, timeout_sec);
                 break;
             }
         }

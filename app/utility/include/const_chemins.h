@@ -1,6 +1,5 @@
 #ifndef _UNIRAIL_CHEMINS
     #define _UNIRAIL_CHEMINS
-    #include "../../EVC/include/automatique.h"
 
     extern const int L_res_req1[];
     extern const int L_res_lib1[];

@@ -1,4 +1,3 @@
-#include "../../EVC/include/automatique.h"
 #include "../include/const_chemins.h"
 
 const int L_res_req1[2] = {3,9};

@@ -48,7 +48,7 @@ void install_signal_deroute(int numSig, void (*pfct)(int));
 void stop_train();
 
 int main(int argc, char *argv[]) {
-    if (argc != 6) printf("EVC | Utilisation : ./rbc <id train> <nombre de tours> <adresse_serveur> <port serveur> <port train>\n");
+    if (argc != 6) printf("ATO/ATP | Utilisation : ./onboard <id train> <nombre de tours> <adresse_serveur> <port serveur> <port train>\n");
     else {
         
 		pthread_t posreport_tid, eoa_tid, message_listener_tid, requests_handler_tid, pos_calculator_tid;
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 
 		mission = atoi(argv[2]);
 		
-        printf("EVC [%d] - Initialisation\n", train_id);
+        printf("ATO/ATP [%d] - Initialisation\n", train_id);
 
 		setup_udp_client(&client, argv[3], atoi(argv[4]), atoi(argv[5]));
 
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
 
 		while (init_attempts < 3) {
 
-			printf("EVC [%d] - Tentative de connexion au RBC...", train_id);
+			printf("ATO/ATP [%d] - Tentative de connexion au Superviseur...", train_id);
 
 			init_message.req_id = generate_unique_req_id();
 			init_message.train_id = train_id;
@@ -106,17 +106,17 @@ int main(int argc, char *argv[]) {
 			if (init_message.code == 200) {
 				break;
 			} else {
-				fprintf(stderr, "\nEVC [%d] - Erreur lors de la connexion au RBC: %d\n", train_id, init_message.code);
+				fprintf(stderr, "\nATO/ATP [%d] - Erreur lors de la connexion au Superviseur: %d\n", train_id, init_message.code);
 				init_attempts++;
 			}
 		}
 
 		if (init_attempts == 3) {
-			fprintf(stderr, "\nEVC [%d] - Impossible de se connecter au RBC\n", train_id);
+			fprintf(stderr, "\nATO/ATP [%d] - Impossible de se connecter au Superviseur\n", train_id);
 			exit(EXIT_FAILURE);
 		}
 
-		printf("OK\nEVC [%d] - Connexion établie\n", train_id);
+		printf("OK\nATO/ATP [%d] - Connexion établie\n", train_id);
 
 		pending_message_t pending_request = {-1, {0, 0, 0, {NULL, NULL}}, NULL, 0, PTHREAD_COND_INITIALIZER, PTHREAD_MUTEX_INITIALIZER, NULL};
 
@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
 }
 
 void stop_train() {
-	printf("\nArrêt de l'EVC...\n");
+	printf("\nArrêt de l'ATO/ATP...\n");
 	mc_consigneVitesse(can_socket, 0);
 	fflush(stdout);
 	close(can_socket);

@@ -40,7 +40,7 @@ void handle_request(message_t recv_message, message_t * send_message, int can_so
 	send_message->req_id = recv_message.req_id;
 
 	if (recv_message.train_id - 1 >= NB_TRAINS) {
-		printf("RBC - ID de train inconnu\n");
+		printf("Superviseur - ID de train inconnu\n");
 		send_message->code = 405;
 		send_message->data[0] = NULL;
 		return;
@@ -50,7 +50,7 @@ void handle_request(message_t recv_message, message_t * send_message, int can_so
 
 		// Rapport de position
 	   	case 101:
-			printf("RBC [%d] - Rapport de position reçu\n", recv_message.train_id-1);
+			printf("Superviseur [%d] - Rapport de position reçu\n", recv_message.train_id-1);
 
 			char * endptr; // Pointeur pour vérifier que la conversion s'est bien passée
 
@@ -73,8 +73,8 @@ void handle_request(message_t recv_message, message_t * send_message, int can_so
 			pos_trains[recv_message.train_id - 1].pos_r = atof(recv_message.data[1]);
 			free_resources(&next_bal_index_lib[recv_message.train_id - 1],recv_message.train_id - 1, pos_trains);
 			if (DEBUG_RES_FREE){
-				printf("RBC [%d] - Prochaine ressource libérée : %d\n", recv_message.train_id - 1, next_bal_index_lib[recv_message.train_id - 1]);
-				printf("RBC [%d] - Ressources libres : %d\n", recv_message.train_id - 1, resources);
+				printf("Superviseur [%d] - Prochaine ressource libérée : %d\n", recv_message.train_id - 1, next_bal_index_lib[recv_message.train_id - 1]);
+				printf("Superviseur [%d] - Ressources libres : %d\n", recv_message.train_id - 1, resources);
 			}
 			pthread_mutex_unlock(&pos_trains_locks[recv_message.train_id - 1]);
 
@@ -84,7 +84,7 @@ void handle_request(message_t recv_message, message_t * send_message, int can_so
 			break;
 
 		case 102:
-			printf("RBC [%d] - Demande d'autorisation de mouvement reçue\n", recv_message.train_id - 1);
+			printf("Superviseur [%d] - Demande d'autorisation de mouvement reçue\n", recv_message.train_id - 1);
 
 			struct sockaddr_in * recv_adr_copy = malloc(sizeof(struct sockaddr_in));
 			memcpy(recv_adr_copy, recv_adr, sizeof(struct sockaddr_in));
@@ -113,7 +113,7 @@ void handle_request(message_t recv_message, message_t * send_message, int can_so
 			break;
 			
 	   	default:
-			printf("RBC - Code de requête inconnu\n");
+			printf("Superviseur - Code de requête inconnu\n");
 			send_message->code = 400;
 			send_message->data[0] = NULL;
 			break;
@@ -128,12 +128,12 @@ void * handle_eoa_request(void * args) {
 	ask_resources(&next_bal_index_req[hea->recv_message.train_id - 1],hea->recv_message.train_id - 1, pos_trains, hea->can_socket);
 
 	if (DEBUG_RES){
-		printf("RBC [%d] - Ressource accordée : %d\n", hea->recv_message.train_id - 1, next_bal_index_req[hea->recv_message.train_id - 1]);
-		printf("RBC [%d] - Ressources libres : %d\n", hea->recv_message.train_id - 1, resources);
+		printf("Superviseur [%d] - Ressource accordée : %d\n", hea->recv_message.train_id - 1, next_bal_index_req[hea->recv_message.train_id - 1]);
+		printf("Superviseur [%d] - Ressources libres : %d\n", hea->recv_message.train_id - 1, resources);
 	}
 
 	position_t EOA = next_eoa(hea->recv_message.train_id-1,pos_trains,L_res_req[hea->recv_message.train_id - 1][next_bal_index_req[hea->recv_message.train_id - 1]], chemins, tailles_chemins);
-	printf("RBC [%d] - Prochaine EOA pour train %d: balise %d, position %f\n", hea->recv_message.train_id - 1, hea->recv_message.train_id - 1, EOA.bal, EOA.pos_r);
+	printf("Superviseur [%d] - Prochaine EOA pour train %d: balise %d, position %f\n", hea->recv_message.train_id - 1, hea->recv_message.train_id - 1, EOA.bal, EOA.pos_r);
 
 	send_message.req_id = generate_unique_req_id();
 	send_message.code = 104;
@@ -157,16 +157,16 @@ void * handle_eoa_request(void * args) {
 		wait_for_response(send_message.req_id, &recv_message, 3);
 
 		if (recv_message.code == 204) {
-			printf("RBC [%d] - EOA acquittée\n", hea->recv_message.train_id - 1);
+			printf("Superviseur [%d] - EOA acquittée\n", hea->recv_message.train_id - 1);
 			break;
 		} else {
-			printf("RBC [%d] - Pas de réponse à l'envoi d'EOA\n", hea->recv_message.train_id - 1);
+			printf("Superviseur [%d] - Pas de réponse à l'envoi d'EOA\n", hea->recv_message.train_id - 1);
 			nb_attempts++;
 		}
 	}
 
 	if (nb_attempts == 5) {
-		printf("RBC [%d] - EOA non acquittée\n", hea->recv_message.train_id - 1);
+		printf("Superviseur [%d] - EOA non acquittée\n", hea->recv_message.train_id - 1);
 	}
 
 	pthread_exit(EXIT_SUCCESS);

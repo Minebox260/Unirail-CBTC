@@ -20,7 +20,7 @@ int compute_new_speed(int state[2],double elapsed_time, double *retenue_sur_vite
 	return (int) *retenue_sur_vitesse;
 }
 
-//Envoie sur le bus can de l'EVC une commande de vitesse pour faire avancer le train à la vitesse v
+//Envoie sur le bus can une commande de vitesse pour faire avancer le train à la vitesse v
 int mc_consigneVitesse(int can_socket, int speed){
     struct can_frame frame;
 
@@ -73,7 +73,7 @@ int init_train(int can_socket) {
 	int last_balise = 0;
 
 	mc_consigneVitesse(can_socket, 20);
-	printf("EVC - Recherche de balise...");
+	printf("ATO - Recherche de balise...");
 	fflush(stdout);
     while (last_balise == 0) {
         int n = read(can_socket, &frame, sizeof(struct can_frame));
@@ -82,7 +82,7 @@ int init_train(int can_socket) {
             last_balise = frame.data[5];
         }
     }
-	printf("OK\nEVC - Balise trouvée: %d\n",last_balise);
+	printf("OK\nATO - Balise trouvée: %d\n",last_balise);
 	fflush(stdout);
 	return last_balise;
 }

@@ -14,7 +14,7 @@ OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(wildcard $(SRC_DIR)/*.c)) 
 TEST_SRCS := $(wildcard $(TEST_DIR)/*.c)
 TEST_BINS := $(patsubst $(TEST_DIR)/%.c, $(BIN_DIR)/%, $(TEST_SRCS))
 
-TARGET = evc
+TARGET = supervisor
 
 all: $(TARGET)
 

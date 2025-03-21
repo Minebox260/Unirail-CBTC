@@ -6,11 +6,11 @@
 	 * ========================
 	 * Requêtes
 	 * ---------
-	 * 100 - Vérification de la connexion au RBC
-	 * 101 - Rapport de position au RBC (DATA: [balise, position relative])
-	 * 102 - Demande d'autorisation de mouvement au RBC
-	 * 103 - Envoi d'une nouvelle mission à l'EVC (DATA: [nombre de tours])
-	 * 104 - Envoi d'une nouvelle autorisation de mouvement à l'EVC (DATA: [balise EOA, position relative EOA])
+	 * 100 - Vérification de la connexion au superviseur
+	 * 101 - Rapport de position au superviseur (DATA: [balise, position relative])
+	 * 102 - Demande d'autorisation de mouvement au superviseur
+	 * 103 - Envoi d'une nouvelle mission (DATA: [nombre de tours])
+	 * 104 - Envoi d'une nouvelle autorisation de mouvement à l'ATO/ATP (DATA: [balise EOA, position relative EOA])
 	 * ---------
 	 * Acknowledges
 	 * ---------

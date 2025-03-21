@@ -33,7 +33,7 @@ void handle_request(message_t recv_message, message_t * send_message, requests_h
             char * endptr;
             long local_mission = strtol(recv_message.data[0], &endptr, 10); // Le pointeur n'a pas bougé, la conversion a échoué
             if (endptr == recv_message.data[0]) {
-                fprintf(stderr, "EVC [%d] - Erreur lors de la réception d'une nouvelle mission: %s\n", recv_message.train_id, recv_message.data[0]);
+                fprintf(stderr, "ATO/ATP [%d] - Erreur lors de la réception d'une nouvelle mission: %s\n", recv_message.train_id, recv_message.data[0]);
                 send_message->code = 403;
                 send_message->data[0] = NULL;   
             }
@@ -47,7 +47,7 @@ void handle_request(message_t recv_message, message_t * send_message, requests_h
             char * endptr; // Pointeur pour vérifier que la conversion s'est bien passée
             long bal = strtol(recv_message.data[0], &endptr, 10); // Le pointeur n'a pas bougé, la conversion a échoué
             if (endptr == recv_message.data[0]) {
-                fprintf(stderr, "EVC [%d] - Erreur lors de la réception de la nouvelle EOA (bal): %s\n", recv_message.train_id, recv_message.data[0]);
+                fprintf(stderr, "ATO/ATP [%d] - Erreur lors de la réception de la nouvelle EOA (bal): %s\n", recv_message.train_id, recv_message.data[0]);
                 send_message->code = 404;
                 send_message->data[0] = NULL;
                 break;
@@ -55,7 +55,7 @@ void handle_request(message_t recv_message, message_t * send_message, requests_h
 
             double pos_r = strtod(recv_message.data[1], &endptr);
             if (endptr == recv_message.data[1]) {
-                fprintf(stderr, "EVC [%d] - Erreur lors de la réception de la nouvelle EOA (pos_r): %s\n", recv_message.train_id, recv_message.data[1]);
+                fprintf(stderr, "ATO/ATP [%d] - Erreur lors de la réception de la nouvelle EOA (pos_r): %s\n", recv_message.train_id, recv_message.data[1]);
                 send_message->code = 404;
                 send_message->data[0] = NULL;
                 break;
@@ -68,7 +68,7 @@ void handle_request(message_t recv_message, message_t * send_message, requests_h
             pthread_cond_signal(rha->eoa_cond);
             pthread_mutex_unlock(rha->eoa_mutex);
 
-            printf("EVC [%d] - Nouvelle EOA reçue: bal %ld, pos_r %.2f\n", recv_message.train_id, bal, pos_r);
+            printf("ATO/ATP [%d] - Nouvelle EOA reçue: bal %ld, pos_r %.2f\n", recv_message.train_id, bal, pos_r);
             fflush(stdout);
 
             send_message->code = 204;
@@ -77,7 +77,7 @@ void handle_request(message_t recv_message, message_t * send_message, requests_h
             break;
         }
         default: {
-            fprintf(stderr, "EVC [%d] - Code de requête inconnu: %d\n", recv_message.train_id, recv_message.code);
+            fprintf(stderr, "ATO/ATP [%d] - Code de requête inconnu: %d\n", recv_message.train_id, recv_message.code);
             send_message->code = 400;
             send_message->data[0] = NULL;
             break;
